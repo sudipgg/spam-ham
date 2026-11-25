@@ -75,10 +75,11 @@ except Exception as e:
     logger.critical("Model files not found! Prediction will fail.")
     model, vectorize_model = None, None
 
+origins = [o.strip() for o in (ORIGIN or "").split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=["*"],
-    allow_origins=["https://staging.d3ok0uz900bq7g.amplifyapp.com"],
+    allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
