@@ -11,5 +11,5 @@ dependencies = [
     "mangum>=0.21.0",
     "nltk>=3.9.2",
     "pandas>=3.0.0",
-    "scikit-learn>=1.8.0",
+    "scikit-learn==1.7.2",
 ]

@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 import joblib
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -27,7 +27,7 @@ except Exception as e:
     logger.error(f"NLTK stopwords load failed. Ensure NLTK_DATA is set: {e}")
 
 class Message(BaseModel):
-    message: str
+    message: str = Field(min_length=1, max_length=5000)
 
 class text_preprocessing():
     def __init__(self):        
@@ -66,7 +66,7 @@ class text_preprocessing():
         string = " ".join(tokens)
         return string
 
-app = FastAPI()
+app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 
 try:
     model = joblib.load(MODEL_NAME)
@@ -80,8 +80,8 @@ origins = [o.strip() for o in (ORIGIN or "").split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
 )
 processor = text_preprocessing()
 
